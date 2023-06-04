@@ -25,7 +25,7 @@ let center = computed(() => {
 
 <template>
     <GMapMap :center="center"
-    :zoom="10"
+    :zoom="5"
     map-type-id="terrain"
     style="width: 100%; height: 600px">
     <GMapMarker

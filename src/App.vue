@@ -7,7 +7,6 @@ import {Record} from './DAO/Record'
 import {Location} from '@element-plus/icons-vue'
 const mapHelper = ref(new GoogleMapHelper())
 const records = ref(new Map<string,Record>())
-let lastest_record = ref({})
 
 var tmp_lat : number
 var tmp_lng : number
@@ -20,6 +19,9 @@ function setTmpLocation(e: Event) {
 }
 
 function setTargetLocation(){
+  if (tmp_lat == null || tmp_lng == null || tmp_placeName == null){
+    throw new Error("can't find this place from google map api call,please check your place name");
+  }
   let current_time = new Date()
   let current_time_str = new Date().toLocaleString();
   let current_zone = new Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -28,21 +30,18 @@ function setTargetLocation(){
   let tmp_record = new Record(mapHelper.value.place_name,mapHelper.value.current_latitude,mapHelper.value.current_longitude,current_zone,current_time,current_time_str)
   records.value.set(mapHelper.value.place_name,tmp_record)
 }
-
-
-
 </script>
 
 <template>
   <div>
     <h3>
-      Latest Searched Location : {{ records.get(mapHelper.place_name)?.getPlaceName() ?? 'Null'}}
+      Latest Searched Location : {{ records.get(mapHelper.place_name)?.getPlaceName() ?? ''}}
     </h3>
     <h3>
-      DateTime : {{ records.get(mapHelper.place_name)?.getDateTime() ?? 'Null' }}
+      DateTime : {{ records.get(mapHelper.place_name)?.getDateTimeStr() ?? '' }}
     </h3>
-    <h3>0
-      TimeZone : {{ records.get(mapHelper.place_name)?.getTimeZone() ?? 'Null' }}
+    <h3>
+      TimeZone : {{ records.get(mapHelper.place_name)?.getTimeZone() ?? '' }}
     </h3>
   </div>
   <div>

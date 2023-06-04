@@ -12,8 +12,8 @@ export class GoogleMapHelper {
 
     constructor(){
         this.api_key = YamlContent.ApiKey
-        this.current_latitude= 80.093048
-        this.current_longitude = 8.84212
+        this.current_latitude= 43.74821
+        this.current_longitude = -79.289458
     }
 
     get_user_location() {
@@ -28,6 +28,8 @@ export class GoogleMapHelper {
                             this.error_msg = response.data.error_message
                         }else{
                             this.current_address = response.data.results[0].formatted_address
+                            // console.log(response.data.results[1].geometry.location.lat)
+                            // console.log(response.data.results[1].geometry.location.lng)
                         }
                     })
                 }

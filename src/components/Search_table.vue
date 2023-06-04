@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import { toRefs, ref , computed, reactive } from 'vue'
+import { toRefs, ref , computed, reactive, Ref } from 'vue'
 import { ElTable,ElInput  } from 'element-plus'
 import {Record} from './DAO/Record'
 import { GoogleMapHelper } from '../common_script/GoogleMapHelper';
 
-const props = defineProps({
-mapHelper: {
-    type: GoogleMapHelper,
-    required: true
-},
-records :{
-    type: Map,
-    required: true
+interface Props {
+  mapHelper: GoogleMapHelper
+  records: Map<string, Record>
 }
-})
+
+const props = defineProps<Props>()
 
 
 const { mapHelper } = toRefs(props)
@@ -54,6 +50,20 @@ const deletePlaceFromRecords =() => {
           records.value.delete(selectedPlaces.value[i])
         }
       }
+
+      let latest_search_time = new Date(0)
+      let lastest_record : Record = null
+      records.value.forEach((record, place_name) => {
+        if(record.getDateTime() > latest_search_time){
+          latest_search_time = record.getDateTime()
+          lastest_record = record
+        }
+      })
+      if (lastest_record != null){
+        mapHelper.value.set_placeName(lastest_record.getPlaceName())
+        mapHelper.value.set_location(lastest_record.getLatitude(),lastest_record.getLongitude())
+      }
+
 }
 
 </script>
