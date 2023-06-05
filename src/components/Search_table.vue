@@ -18,19 +18,17 @@ const {records} = toRefs(props)
 const currentPage = ref(1);
 const pageSize = 10;
 const selectedPlaces = ref([]);
-const search = ref('')
 const totalRecords = computed(() => records.value.size);
-
+const search = ref('')
 
 const tableDataToShow = computed(() => {
       const startIndex = (currentPage.value - 1) * pageSize;
       const endIndex = startIndex + pageSize;
       const keys = Array.from(records.value.keys());
       const slicedKeys = keys.slice(startIndex, endIndex);
-
       const filteredRecords = slicedKeys.filter((key) => {
       const record = records.value.get(key);
-      return record.placeName.includes(search.value); // Modify this condition based on your search requirements
+      return record.placeName.includes(search.value);
       });
       return filteredRecords.map((key) => records.value.get(key));
     });
@@ -77,8 +75,12 @@ const deletePlaceFromRecords =() => {
       <el-table-column label="PlaceName">
         <template #header>
           <div class="table_header">
+            <el-tooltip content="Search by Place Name" placement="top">
             <el-input v-model="search" size="small" placeholder="PlaceName" />
+            </el-tooltip>
+            <el-tooltip content="Delete Selected Records" placement="top">
             <el-button size="small" type="danger" @click="deletePlaceFromRecords" >Delete</el-button>
+            </el-tooltip>
           </div>
         </template>
         <template #default="scope">
@@ -98,4 +100,5 @@ const deletePlaceFromRecords =() => {
 .table_header{
   display: grid;
 }
+
 </style>

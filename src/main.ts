@@ -15,8 +15,4 @@ app.use(VueGoogleMaps, {
     },
 })
 app.use(ElementPlus)
-
-console.log(YamlContent.ApiKey);
-
-
 app.mount('#app')

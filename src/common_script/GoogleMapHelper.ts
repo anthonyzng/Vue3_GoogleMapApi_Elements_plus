@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from "axios";
 import { google } from 'googlemaps';
 import YamlContent from '../config.yaml';
 
@@ -16,29 +16,31 @@ export class GoogleMapHelper {
         this.current_longitude = -79.289458
     }
 
-    get_user_location() {
-        if (this.check_browser_support()){
-            navigator.geolocation.getCurrentPosition(
-                position=>{
-                    this.current_latitude = position.coords.latitude
-                    this.current_longitude = position.coords.longitude
-                    axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+this.current_latitude+","+this.current_longitude+"&key="+this.api_key)
-                    .then(response =>{
-                        if (response.data.error_message){
-                            this.error_msg = response.data.error_message
-                        }else{
-                            this.current_address = response.data.results[0].formatted_address
-                            // console.log(response.data.results[1].geometry.location.lat)
-                            // console.log(response.data.results[1].geometry.location.lng)
-                        }
-                    })
-                }
-                ,error =>{
-                    this.error_msg = error.message
-                    console.log(this.error_msg)
-                }
-                
-            );
+    async get_user_location() {
+        if (this.check_browser_support()) {
+        try {
+            const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+            this.current_latitude = position.coords.latitude;
+            this.current_longitude = position.coords.longitude;
+            const timeout = 3000;
+            const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + this.current_latitude + "," + this.current_longitude + "&key=" + this.api_key, {
+            timeout: timeout
+            });
+            if (response.data.error_message) {
+                this.error_msg = response.data.error_message;
+            } else {
+                this.current_address = response.data.results[0].formatted_address;
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && (error as AxiosError).code === "ECONNABORTED") {
+            console.log("Request timed out");
+            } else {
+                this.error_msg = error.message;
+                console.log(this.error_msg);
+            }
+        }
         }
     }
 

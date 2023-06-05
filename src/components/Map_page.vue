@@ -27,7 +27,7 @@ let center = computed(() => {
     <GMapMap :center="center"
     :zoom="5"
     map-type-id="terrain"
-    style="width: 100%; height: 600px">
+    class="map_style">
     <GMapMarker
     :key="place_name"
     v-for="[place_name, record] in records"
@@ -39,4 +39,15 @@ let center = computed(() => {
 </template>
 
 <style scoped>
+.map_style{
+    width: 100%;
+    height: 750px;
+}
+
+@media (max-width: 800px) {
+    .map_style {
+        height : 450px
+    }
+}
+
 </style>
