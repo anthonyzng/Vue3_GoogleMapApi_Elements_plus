@@ -10,10 +10,20 @@ export class Record {
     timezone : string
     datetime : Date
     datetime_str : string
+    datetime_local_timezone_id : string
+    datetime_local_timezone_str : string
     position : Position
 
 
-    constructor(place_name : string,latitude:number,longitude:number,timezone : string ,dateTime : Date,datetime_str:string){
+    constructor(
+        place_name : string,
+        latitude:number,
+        longitude:number,
+        timezone : string,
+        dateTime : Date,
+        datetime_str:string,
+        datetime_local_time_zone_id:string,
+        datetime_local_time_zone_str:string){
         this.placeName = place_name
         this.timezone = timezone
         this.datetime = dateTime
@@ -24,8 +34,11 @@ export class Record {
             lat:this.latitude,
             lng:this.longitude
         }
+        this.datetime_local_timezone_id = datetime_local_time_zone_id
+        this.datetime_local_timezone_str = datetime_local_time_zone_str
     }
 
+    //setter
     setPlaceName(place_name:string){
         this.placeName = place_name
     }
@@ -50,6 +63,15 @@ export class Record {
         this.datetime_str = dateTime_str
     }
 
+    setDateTimeLocalTimeZoneId(dateTime_str : string){
+        this.datetime_local_timezone_id = dateTime_str
+    }
+
+    setDateTimeLocalTimeZoneStr(dateTime_str : string){
+        this.datetime_local_timezone_str = dateTime_str
+    }
+
+    // getter
     getPlaceName(){
         return this.placeName
     }
@@ -76,5 +98,13 @@ export class Record {
 
     getPosition(){
         return this.position
+    }
+
+    getDateTimeLocalTimeZoneId(){
+        return this.datetime_local_timezone_id
+    }
+
+    getDateTimeLocalTimeZoneStr(){
+        return this.datetime_local_timezone_str
     }
 }

@@ -5,6 +5,7 @@ import Search_table from './components/Search_table.vue';
 import { GoogleMapHelper } from './common_script/GoogleMapHelper';
 import {Record} from './DAO/Record'
 import {MapLocation,Search,Location,Timer,Coordinate} from '@element-plus/icons-vue'
+import { result } from 'lodash';
 const mapHelper = ref(new GoogleMapHelper())
 const records = ref(new Map<string,Record>())
 
@@ -16,17 +17,12 @@ let error_msg = ref("")
 
 function setTmpLocation(e: Event) {
   console.log(e)
-  if (e == null){
-    tmp_lat = null
-    tmp_lng = null
-    tmp_placeName = null
-  }
   tmp_lat = e.geometry.location.lat()
   tmp_lng = e.geometry.location.lng()
   tmp_placeName = e.formatted_address
 }
 
-function setTargetLocation(){
+async function setTargetLocation(){
   if (tmp_lat == null || tmp_lng == null || tmp_placeName == null){
     this.error_msg = "can't find this place from google map api call,please check your place name"
     throw new Error("can't find this place from google map api call,please check your place name");
@@ -34,10 +30,30 @@ function setTargetLocation(){
   let current_time = new Date()
   let current_time_str = new Date().toLocaleString();
   let current_zone = new Intl.DateTimeFormat().resolvedOptions().timeZone
-  mapHelper.value.set_placeName(tmp_placeName)
-  mapHelper.value.set_location(tmp_lat,tmp_lng)
-  let tmp_record = new Record(mapHelper.value.place_name,mapHelper.value.current_latitude,mapHelper.value.current_longitude,current_zone,current_time,current_time_str)
+  let current_timestamp = current_time.getTime()/10
+  try{
+    let result = await mapHelper.value.get_location_datatime(tmp_lat,tmp_lng,current_timestamp)
+    let timeZone = result?.timeZoneId
+    const currentDate = current_time.toLocaleString('en-US', {timeZone});
+    //---
+    mapHelper.value.set_placeName(tmp_placeName)
+    mapHelper.value.set_location(tmp_lat,tmp_lng)
+  let tmp_record = new Record(
+    mapHelper.value.place_name,
+    mapHelper.value.current_latitude,
+    mapHelper.value.current_longitude,
+    current_zone,
+    current_time,
+    current_time_str,
+    timeZone,
+    currentDate
+    )
   records.value.set(mapHelper.value.place_name,tmp_record)
+  }catch(e){
+    console.log("can't get the location timezone")
+  }
+
+
 }
 
 async function btn_locate_event(mapHelper: GoogleMapHelper){
@@ -68,13 +84,13 @@ async function btn_locate_event(mapHelper: GoogleMapHelper){
         <div>
           <el-icon :size="20" color="green"><Timer /></el-icon>
           <h3>
-            DateTime : {{ records.get(mapHelper.place_name)?.getDateTimeStr() ?? '' }}
+            DateTime : {{ records.get(mapHelper.place_name)?.getDateTimeLocalTimeZoneStr() ?? '' }}
           </h3>
         </div>
         <div>
           <el-icon :size="20" color="blue"><Coordinate /></el-icon>
           <h3>
-          TimeZone : {{ records.get(mapHelper.place_name)?.getTimeZone() ?? '' }}
+          TimeZone : {{ records.get(mapHelper.place_name)?.getDateTimeLocalTimeZoneId() ?? '' }}
           </h3>
         </div>
       </div>
@@ -89,8 +105,18 @@ async function btn_locate_event(mapHelper: GoogleMapHelper){
             @keyup.enter.native="setTargetLocation"
           >
           </GMapAutocomplete>
-        <el-button type="primary" :icon="Search" placeholder="Enter target location" @click="setTargetLocation" class="btn_locate">Search</el-button>
+        <el-button type="primary" :icon="Search" placeholder="Enter target location" @click="setTargetLocation" class="btn_locate"></el-button>
       </div>
+        <div class="lastest_record">
+          <el-icon :size="20" color="blue"><Coordinate /></el-icon>
+          <h3>
+          Your TimeZone : {{ records.get(mapHelper.place_name)?.getTimeZone() ?? '' }}
+          </h3>
+          <el-icon :size="20" color="green"><Timer /></el-icon>
+          <h3>
+          Your DateTime : {{ records.get(mapHelper.place_name)?.getDateTimeStr() ?? '' }}
+          </h3>
+        </div>
   </div>
   <div class="container">
   <div>

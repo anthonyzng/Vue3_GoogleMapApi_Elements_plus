@@ -44,6 +44,30 @@ export class GoogleMapHelper {
         }
     }
 
+    async get_location_datatime(lat : number , lng : number ,timestamp : number){
+        try{
+            const timeout = 3000;
+            const response = await axios.get("https://maps.googleapis.com/maps/api/timezone/json?location=" + lat + "%2C" + lng + "&timestamp="+timestamp+"&key=" + this.api_key, {
+            timeout: timeout
+            });
+            if (response.data.error_message) {
+                this.error_msg = response.data.error_message;
+            } else {
+                return {
+                    timeZoneId : response.data.timeZoneId,
+                    timeZoneName : response.data.timeZoneName
+                }
+            }
+        }catch(error){
+            if (axios.isAxiosError(error) && (error as AxiosError).code === "ECONNABORTED") {
+                console.log("Request timed out");
+                } else {
+                    this.error_msg = error.message;
+                    console.log(this.error_msg);
+                }
+        }
+    }
+
     set_location(latitude : number,longitude : number){
         this.current_latitude = latitude
         this.current_longitude = longitude
