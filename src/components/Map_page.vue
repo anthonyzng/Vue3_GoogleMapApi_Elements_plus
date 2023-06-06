@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRefs, ref , computed, reactive } from 'vue'
+import { toRefs, ref , computed, watch  } from 'vue'
 import { GoogleMapHelper } from '../common_script/GoogleMapHelper';
 import { stringifyExpression } from '@vue/compiler-core';
 import {Record} from './DAO/Record'
@@ -20,7 +20,6 @@ const {records} = toRefs(props)
 let center = computed(() => {
     return { lat: mapHelper.value.current_latitude, lng: mapHelper.value.current_longitude }
 })
-
 </script>
 
 <template>
@@ -49,5 +48,4 @@ let center = computed(() => {
         height : 450px
     }
 }
-
 </style>
