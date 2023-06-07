@@ -62,7 +62,7 @@ async function setTargetLocation(){
       current_time_str,
       timeZone,
       currentDate
-      )
+    )
     records.value.set(mapHelper.value.place_name,tmp_record)
     error_msg.value = null
     bol_error.value = false

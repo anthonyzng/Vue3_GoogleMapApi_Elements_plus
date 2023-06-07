@@ -18,43 +18,43 @@ const totalRecords = computed(() => records.value.size);
 const search = ref('')
 //function
 const tableDataToShow = computed(() => {
-      const startIndex = (currentPage.value - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      const keys = Array.from(records.value.keys());
-      const slicedKeys = keys.slice(startIndex, endIndex);
-      const filteredRecords = slicedKeys.filter((key) => {
-      const record = records.value.get(key);
-      return record.placeName.includes(search.value);
-      });
-      return filteredRecords.map((key) => records.value.get(key));
-    });
+  const startIndex = (currentPage.value - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const keys = Array.from(records.value.keys());
+  const slicedKeys = keys.slice(startIndex, endIndex);
+  const filteredRecords = slicedKeys.filter((key) => {
+    const record = records.value.get(key);
+    return record.placeName.includes(search.value);
+  });
+  return filteredRecords.map((key) => records.value.get(key));
+});
 
 const handlePageChange = (newPage) => {
-      currentPage.value = newPage;
+  currentPage.value = newPage;
 };
 
 const handleSelectionChange = (selection) => {
-      selectedPlaces.value = selection.map((item) => item.placeName)
+  selectedPlaces.value = selection.map((item) => item.placeName)
 };
 
 const deletePlaceFromRecords =() => {
-      for(let i = 0; i < selectedPlaces.value.length;i++){
-        if(records.value.has(selectedPlaces.value[i])){
-          records.value.delete(selectedPlaces.value[i])
-        }
-      }
-      let latest_search_time = new Date(0)
-      let lastest_record : Record = null
-      records.value.forEach((record, place_name) => {
-        if(record.getDateTime() > latest_search_time){
-          latest_search_time = record.getDateTime()
-          lastest_record = record
-        }
-      })
-      if (lastest_record != null){
-        mapHelper.value.set_placeName(lastest_record.getPlaceName())
-        mapHelper.value.set_location(lastest_record.getLatitude(),lastest_record.getLongitude())
-      }
+  for(let i = 0; i < selectedPlaces.value.length;i++){
+    if(records.value.has(selectedPlaces.value[i])){
+      records.value.delete(selectedPlaces.value[i])
+    }
+  }
+  let latest_search_time = new Date(0)
+  let lastest_record : Record = null
+  records.value.forEach((record, place_name) => {
+    if(record.getDateTime() > latest_search_time){
+      latest_search_time = record.getDateTime()
+      lastest_record = record
+    }
+  })
+  if (lastest_record != null){
+    mapHelper.value.set_placeName(lastest_record.getPlaceName())
+    mapHelper.value.set_location(lastest_record.getLatitude(),lastest_record.getLongitude())
+  }
 }
 
 function go_to_target_place(target_lat : number,target_lng : number){

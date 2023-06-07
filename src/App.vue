@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref,onMounted} from 'vue'
+import { ref} from 'vue'
 import Map_page from './components/map_page.vue' 
 import Search_table from './components/Search_table.vue';
 import Search_bar from './components/Search_bar.vue';
@@ -116,12 +116,12 @@ const callChildMethod = async () => {
 }
 
 .btn_search_and_table_container{
-display: none;
-position: fixed;
-top: 50%;
-left: 0px;
-z-index: 99;
-flex-direction: column;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 0px;
+  z-index: 99;
+  flex-direction: column;
 }
 
 .btn_search_and_table{
@@ -178,29 +178,28 @@ flex-direction: column;
 
 /* max-width  */
 @media (max-width: 900px) {
-.container {
+  .container {
     flex-direction: column;
-}
+  }
 
-.btn_search_and_table_container{
-  display: flex;
-}
-.btn_in_map{
-  position: absolute;
-  top: 710px;
-  left: 77px;
-}
+  .btn_search_and_table_container{
+    display: flex;
+  }
+  .btn_in_map{
+    position: absolute;
+    top: 710px;
+    left: 77px;
+  }
 
-.el-button + .el-button{
-  margin-left: 0px;
-}
-
+  .el-button + .el-button{
+    margin-left: 0px;
+  }
 }
 @media (max-width: 800px) {
   .btn_in_map{
-  position: absolute;
-  top: 410px;
-  left: 77px;
+    position: absolute;
+    top: 410px;
+    left: 77px;
   }
 }
 
