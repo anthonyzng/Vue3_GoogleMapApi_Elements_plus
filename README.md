@@ -3,3 +3,4 @@ This project aims to use Vue 3 + Vite with some library such as (Tailwindcss,Ele
 
 to Useage it :
 git clone this repo and replace your GoogleMapApiKey into the config.yaml 
+open the project dir and run "npm run dev"
