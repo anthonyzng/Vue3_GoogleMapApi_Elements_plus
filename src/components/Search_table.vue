@@ -64,7 +64,7 @@ function go_to_target_place(target_lat : number,target_lng : number){
 <template>
   <el-table
     :data="tableDataToShow"
-    :default-sort="{ prop: 'id', order: 'ascending' }"
+    :default-sort="{ prop: 'datetime_str', order: 'descending' }"
     @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="30" />
     <el-table-column label="PlaceName">
@@ -86,7 +86,7 @@ function go_to_target_place(target_lat : number,target_lng : number){
       </template>
     </el-table-column>
     <el-table-column prop="timezone" label="Timezone"></el-table-column>
-    <el-table-column prop="datetime_str" label="Last Time"></el-table-column>
+    <el-table-column prop="datetime_str" label="Last Time" sortable></el-table-column>
   </el-table>
   <el-pagination
     :total="totalRecords"

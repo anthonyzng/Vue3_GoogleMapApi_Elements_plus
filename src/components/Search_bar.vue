@@ -27,6 +27,10 @@ function setTmpLocation(e: Event) {
   tmp_placeName = e.formatted_address
 }
 
+function input_value_changed(e:Event){
+  tmp_placeName = null
+}
+
 async function btn_locate_event(mapHelper: GoogleMapHelper){
   this.btn_loading = true;
   try{
@@ -66,9 +70,6 @@ async function setTargetLocation(){
     records.value.set(mapHelper.value.place_name,tmp_record)
     error_msg.value = null
     bol_error.value = false
-    tmp_lat = null
-    tmp_lng = null
-    tmp_placeName = null
   }catch(e){
     error_msg.value = "Can't get the location timezone"
     bol_error.value = true
@@ -97,6 +98,7 @@ defineExpose({
       class="auto_complete_input"
       placeholder="Enter target place"
       @place_changed="(e: Event) => setTmpLocation(e)"
+      @keyup="(e:Event)=> input_value_changed(e)"
       @keyup.enter.native="setTargetLocation">
     </GMapAutocomplete>
   <el-button type="primary" :icon="Search" placeholder="Enter target location" @click="setTargetLocation" class="btn_locate"></el-button>
