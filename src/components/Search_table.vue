@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { toRefs, ref , computed, reactive, Ref } from 'vue'
+import { toRefs, ref , computed} from 'vue'
 import { ElTable,ElInput  } from 'element-plus'
 import {Record} from './DAO/Record'
 import { GoogleMapHelper } from '../common_script/GoogleMapHelper';
-
+import {MapLocation} from '@element-plus/icons-vue'
 interface Props {
   mapHelper: GoogleMapHelper
   records: Map<string, Record>
 }
 
 const props = defineProps<Props>()
-
-
 const { mapHelper } = toRefs(props)
 const {records} = toRefs(props)
-
 const currentPage = ref(1);
 const pageSize = 10;
 const selectedPlaces = ref([]);
@@ -64,6 +61,10 @@ const deletePlaceFromRecords =() => {
 
 }
 
+function go_to_target_place(target_lat : number,target_lng : number){
+  mapHelper.value.set_location(target_lat,target_lng)
+}
+
 </script>
 <template>
     <el-table
@@ -84,7 +85,10 @@ const deletePlaceFromRecords =() => {
           </div>
         </template>
         <template #default="scope">
-          {{ scope.row.placeName }}
+          <p>{{ scope.row.placeName }}</p>
+        <el-tooltip content="To this place" placement="top">
+        <el-button type="success" :icon="MapLocation" @click="go_to_target_place(scope.row.latitude,scope.row.longitude)"></el-button>
+        </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column prop="timezone" label="Timezone"></el-table-column>

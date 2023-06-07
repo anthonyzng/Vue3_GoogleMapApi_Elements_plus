@@ -6,7 +6,6 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import YamlContent from './config.yaml';
 
-
 const app = createApp(App)
 app.use(VueGoogleMaps, {
     load: {
