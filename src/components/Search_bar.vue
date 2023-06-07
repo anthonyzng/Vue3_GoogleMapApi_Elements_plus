@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { toRefs, ref , computed } from 'vue'
-  import {MapLocation,Search,Location,Timer,Coordinate, Memo} from '@element-plus/icons-vue'
+  import {MapLocation,Search} from '@element-plus/icons-vue'
   import { GoogleMapHelper } from '../common_script/GoogleMapHelper';
   import {Record} from '../DAO/Record'
   interface Props {
@@ -22,8 +22,6 @@ let bol_error = ref(false)
 
 //function 
 function setTmpLocation(e: Event) {
-  console.log(e)
-  console.log("asd")
   tmp_lat = e.geometry.location.lat()
   tmp_lng = e.geometry.location.lng()
   tmp_placeName = e.formatted_address
@@ -43,7 +41,6 @@ async function setTargetLocation(){
   if (tmp_lat == null || tmp_lng == null || tmp_placeName == null){
     error_msg.value = "Can't find this place from google map api call,please enter a correct place"
     bol_error.value = true
-    console.log(bol_error.value)
     throw new Error("Can't find this place from google map api call,please enter a correct place");
   }
   let current_time = new Date()
@@ -85,26 +82,24 @@ defineExpose({
 })
 </script>
 <template>
-        <el-tooltip content="Locate Me" placement="top">
-        <el-button :type="btn_loading ? 'warning' : 'success'" :icon="MapLocation" :loading="btn_loading" @click="btn_locate_event(mapHelper)" class="btn_locate" ></el-button>
-        </el-tooltip>
-        <el-alert
-          title="Error Alert"
-          type="error"
-          :description="error_msg"
-          show-icon
-          effect="dark"
-          :closable="false"
-          :class="bol_error ? 'err_show' : 'err_hidden'"
-        />
-          <GMapAutocomplete
-            class="auto_complete_input"
-            placeholder="Enter target place"
-            @place_changed="(e: Event) => setTmpLocation(e)"
-            @keyup.enter.native="setTargetLocation"
-          >
-          </GMapAutocomplete>
-        <el-button type="primary" :icon="Search" placeholder="Enter target location" @click="setTargetLocation" class="btn_locate"></el-button>
+  <el-tooltip content="Locate Me" placement="top">
+  <el-button :type="btn_loading ? 'warning' : 'success'" :icon="MapLocation" :loading="btn_loading" @click="btn_locate_event(mapHelper)" class="btn_locate" ></el-button>
+  </el-tooltip>
+  <el-alert
+    title="Error Alert"
+    type="error"
+    :description="error_msg"
+    show-icon
+    effect="dark"
+    :closable="false"
+    :class="bol_error ? 'err_show' : 'err_hidden'"/>
+    <GMapAutocomplete
+      class="auto_complete_input"
+      placeholder="Enter target place"
+      @place_changed="(e: Event) => setTmpLocation(e)"
+      @keyup.enter.native="setTargetLocation">
+    </GMapAutocomplete>
+  <el-button type="primary" :icon="Search" placeholder="Enter target location" @click="setTargetLocation" class="btn_locate"></el-button>
 </template>
 <style scoped lang="scss">
   .search-bar {
@@ -114,11 +109,9 @@ defineExpose({
   height: 40px;
   font-size: 25px;
 }
-
 .err_hidden{
   display: none;
 }
-
 .err_show{
   display: inline-flex;
   position: absolute;
@@ -131,7 +124,6 @@ defineExpose({
   width: 50%;
   height: 40px;
 }
-
 .auto_complete_input:focus{
   @apply border-white
 }

@@ -6,12 +6,12 @@ import Search_bar from './components/Search_bar.vue';
 import { GoogleMapHelper } from './common_script/GoogleMapHelper';
 import {Record} from './DAO/Record'
 import {MapLocation,Search,Location,Timer,Coordinate, Memo,CircleClose} from '@element-plus/icons-vue'
-
+//init var
 const mapHelper = ref(new GoogleMapHelper())
 const records = ref(new Map<string,Record>())
 const search_bar = ref<HTMLElement | null>(null)
-
 let btn_loading = ref(false)
+//function
 // onMounted(() => { // for mount to child component value
 //   btn_loading.value = search_bar.value.btn_loading
 //   console.log(btn_loading.value)
@@ -21,7 +21,6 @@ const callChildMethod = async () => {
   await search_bar.value.btn_locate_event(mapHelper.value)
   btn_loading.value = false
 }
-
 </script>
 
 <template>
@@ -49,7 +48,7 @@ const callChildMethod = async () => {
         </el-tooltip>
       </dialog>
     </div>
-  <div class="display_box" ref="show_content">
+  <div class="display_box">
       <div class="lastest_record">
         <div class="content">
           <el-icon :size="20" color="red" class="icon"><Location /></el-icon>
@@ -76,36 +75,35 @@ const callChildMethod = async () => {
       <div class="control_panel">
         <Search_bar ref="search_bar" v-bind:map-helper="mapHelper" v-bind:records="records"></Search_bar>
       </div>
-        <div class="lastest_record">
-          <el-icon :size="20" color="blue"><Coordinate /></el-icon>
-          <h3>
-          Your TimeZone : {{ records.get(mapHelper.place_name)?.getTimeZone() ?? '' }}
-          </h3>
-          <el-icon :size="20" color="green"><Timer /></el-icon>
-          <h3>
-          Your DateTime : {{ records.get(mapHelper.place_name)?.getDateTimeStr() ?? '' }}
-          </h3>
-        </div>
+      <div class="lastest_record">
+        <el-icon :size="20" color="blue"><Coordinate /></el-icon>
+        <h3>
+        Your TimeZone : {{ records.get(mapHelper.place_name)?.getTimeZone() ?? '' }}
+        </h3>
+        <el-icon :size="20" color="green"><Timer /></el-icon>
+        <h3>
+        Your DateTime : {{ records.get(mapHelper.place_name)?.getDateTimeStr() ?? '' }}
+        </h3>
+      </div>
   </div>
+
   <div class="container">
-  <div>
-    <Search_table v-bind:map-helper="mapHelper" v-bind:records="records"></Search_table>
-  </div>
-  <div style="position: relative;">
-    <Map_page v-bind:map-helper="mapHelper" v-bind:records="records" >
-    </Map_page>
-    <div class="btn_in_map">
+    <div>
+      <Search_table v-bind:map-helper="mapHelper" v-bind:records="records"></Search_table>
+    </div>
+    <div style="position: relative;">
+      <Map_page v-bind:map-helper="mapHelper" v-bind:records="records" ></Map_page>
+      <div class="btn_in_map">
         <el-tooltip content="Locate Me" placement="top">
         <el-button :type="btn_loading ? 'warning' : 'success'" :icon="MapLocation" :loading="btn_loading" @click="callChildMethod" class="btn_locate" ></el-button>
         </el-tooltip>
+      </div>
     </div>
-  </div>
   </div>
 </div>
 </template>
 
 <style scoped>
-
 #search_box{
   background-color: floralwhite;
 }

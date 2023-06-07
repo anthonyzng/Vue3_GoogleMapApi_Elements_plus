@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { toRefs, ref , computed, watch  } from 'vue'
+import { toRefs , computed } from 'vue'
 import { GoogleMapHelper } from '../common_script/GoogleMapHelper';
-import { stringifyExpression } from '@vue/compiler-core';
-import {Record} from './DAO/Record'
 
 const props = defineProps({
 mapHelper: {
@@ -14,7 +12,7 @@ records :{
     required: true
 }
 })
-
+//init var
 const { mapHelper } = toRefs(props)
 const {records} = toRefs(props)
 let center = computed(() => {
