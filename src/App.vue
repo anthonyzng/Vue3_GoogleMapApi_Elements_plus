@@ -32,18 +32,18 @@ const callChildMethod = async () => {
         <el-button :icon="Search" circle class="btn_search_and_table" type="primary" @click="dialogSearchBar = true"></el-button>
       </el-tooltip>
 
-      <el-dialog v-model="dialogSearchBar" title="Shipping address">
+      <el-dialog v-model="dialogSearchBar" title="Search Bar">
         <Search_bar v-bind:map-helper="mapHelper" v-bind:records="records" style="z-index: 99999;"></Search_bar>
         <el-tooltip content="Close" placement="top">
         <el-button :icon="CircleClose"  class="btn_close_dialog" type="danger" @click="dialogSearchBar = false"></el-button>
         </el-tooltip>
       </el-dialog>
 
-      <el-tooltip content="Open Search Bar" placement="top">
+      <el-tooltip content="Open Search Table" placement="top">
         <el-button :icon="Memo" circle class="btn_search_and_table" type="success" @click="dialogSearcTab = true"></el-button>
       </el-tooltip>
 
-      <el-dialog v-model="dialogSearcTab" title="Shipping address">
+      <el-dialog v-model="dialogSearcTab" title="Search Table">
         <Search_table v-bind:map-helper="mapHelper" v-bind:records="records"></Search_table>
         <el-tooltip content="Close" placement="top">
         <el-button :icon="CircleClose"  class="btn_close_dialog" type="danger" @click="dialogSearcTab = false"></el-button>
