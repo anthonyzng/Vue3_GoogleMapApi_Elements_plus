@@ -11,6 +11,8 @@ const mapHelper = ref(new GoogleMapHelper())
 const records = ref(new Map<string,Record>())
 const search_bar = ref<HTMLElement | null>(null)
 let btn_loading = ref(false)
+const dialogSearchBar = ref(false)
+const dialogSearcTab = ref(false)
 //function
 // onMounted(() => { // for mount to child component value
 //   btn_loading.value = search_bar.value.btn_loading
@@ -27,26 +29,26 @@ const callChildMethod = async () => {
   <div class="p-5">
     <div class="btn_search_and_table_container">
       <el-tooltip content="Open Search Bar" placement="top">
-        <el-button :icon="Search" circle class="btn_search_and_table" type="primary" onclick="search_box.showModal()"></el-button>
+        <el-button :icon="Search" circle class="btn_search_and_table" type="primary" @click="dialogSearchBar = true"></el-button>
       </el-tooltip>
 
-      <dialog id="search_box">
-        <Search_bar v-bind:map-helper="mapHelper" v-bind:records="records"></Search_bar>
+      <el-dialog v-model="dialogSearchBar" title="Shipping address">
+        <Search_bar v-bind:map-helper="mapHelper" v-bind:records="records" style="z-index: 99999;"></Search_bar>
         <el-tooltip content="Close" placement="top">
-        <el-button :icon="CircleClose"  class="btn_close_dialog" type="danger" onclick="search_box.close()"></el-button>
+        <el-button :icon="CircleClose"  class="btn_close_dialog" type="danger" @click="dialogSearchBar = false"></el-button>
         </el-tooltip>
-      </dialog>
+      </el-dialog>
 
-      <el-tooltip content="Open Records Table" placement="top">
-        <el-button :icon="Memo" circle class="btn_search_and_table" type="success" onclick="search_table.showModal()"></el-button>
+      <el-tooltip content="Open Search Bar" placement="top">
+        <el-button :icon="Memo" circle class="btn_search_and_table" type="success" @click="dialogSearcTab = true"></el-button>
       </el-tooltip>
 
-      <dialog id="search_table">
+      <el-dialog v-model="dialogSearcTab" title="Shipping address">
         <Search_table v-bind:map-helper="mapHelper" v-bind:records="records"></Search_table>
         <el-tooltip content="Close" placement="top">
-        <el-button :icon="CircleClose"  class="btn_close_dialog" type="danger" onclick="search_table.close()"></el-button>
+        <el-button :icon="CircleClose"  class="btn_close_dialog" type="danger" @click="dialogSearcTab = false"></el-button>
         </el-tooltip>
-      </dialog>
+      </el-dialog>
     </div>
   <div class="display_box">
       <div class="lastest_record">
