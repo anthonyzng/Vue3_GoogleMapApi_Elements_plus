@@ -196,6 +196,9 @@ const callChildMethod = async () => {
   .el-button + .el-button{
     margin-left: 0px;
   }
+  .content{
+    top: 74px;
+  }
 }
 @media (max-width: 800px) {
   .btn_in_map{
