@@ -19,10 +19,10 @@ let tmp_placeName : string
 let btn_loading = ref(false)
 let error_msg = ref('')
 let bol_error = ref(false)
-
+let enter_count = 0
 //function 
 function setTmpLocation(e: Event) {
-  console.log(e)
+  enter_count++
   tmp_lat = e.geometry.location.lat()
   tmp_lng = e.geometry.location.lng()
   tmp_placeName = e.formatted_address
@@ -43,8 +43,9 @@ async function btn_locate_event(mapHelper: GoogleMapHelper){
 }
 
 async function setTargetLocation(e:Event){
-  console.log(e)
-  console.log(tmp_lat,tmp_lng,tmp_placeName)
+  if(enter_count ==0){
+    return
+  }
   if (tmp_lat == null || tmp_lng == null || tmp_placeName == null){
     error_msg.value = "Can't find this place from google map api call,please enter a correct place"
     bol_error.value = true
@@ -73,6 +74,7 @@ async function setTargetLocation(e:Event){
     records.value.set(mapHelper.value.place_name,tmp_record)
     error_msg.value = null
     bol_error.value = false
+    enter_count = 0
   }catch(e){
     error_msg.value = "Can't get the location timezone"
     bol_error.value = true
