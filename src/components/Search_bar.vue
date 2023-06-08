@@ -22,6 +22,7 @@ let bol_error = ref(false)
 
 //function 
 function setTmpLocation(e: Event) {
+  console.log(e)
   tmp_lat = e.geometry.location.lat()
   tmp_lng = e.geometry.location.lng()
   tmp_placeName = e.formatted_address
@@ -41,7 +42,9 @@ async function btn_locate_event(mapHelper: GoogleMapHelper){
   }
 }
 
-async function setTargetLocation(){
+async function setTargetLocation(e:Event){
+  console.log(e)
+  console.log(tmp_lat,tmp_lng,tmp_placeName)
   if (tmp_lat == null || tmp_lng == null || tmp_placeName == null){
     error_msg.value = "Can't find this place from google map api call,please enter a correct place"
     bol_error.value = true
@@ -98,8 +101,8 @@ defineExpose({
       class="auto_complete_input"
       placeholder="Enter target place"
       @place_changed="(e: Event) => setTmpLocation(e)"
-      @keyup="(e:Event)=> input_value_changed(e)"
-      @keyup.enter.native="setTargetLocation">
+      @change="(e:Event)=>input_value_changed(e)"
+      @keyup.enter.native="(e:Event)=>setTargetLocation(e)">
     </GMapAutocomplete>
   <el-button type="primary" :icon="Search" placeholder="Enter target location" @click="setTargetLocation" class="btn_locate"></el-button>
 </template>
