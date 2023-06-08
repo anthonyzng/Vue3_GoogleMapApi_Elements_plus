@@ -203,6 +203,9 @@ const callChildMethod = async () => {
     top: 410px;
     left: 77px;
   }
+  .lastest_record{
+    flex-direction: column;
+  }
 }
 
 /* animation */
