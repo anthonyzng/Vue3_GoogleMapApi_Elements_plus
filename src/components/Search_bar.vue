@@ -75,6 +75,7 @@ async function setTargetLocation(e:Event){
     error_msg.value = null
     bol_error.value = false
     enter_count = 0
+    e.target.value = ""
   }catch(e){
     error_msg.value = "Can't get the location timezone"
     bol_error.value = true
